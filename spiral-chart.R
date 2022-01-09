@@ -1,5 +1,4 @@
-# remotes::install_github("AllanCameron/geomtextpath")
-pacman::p_load("tidyverse", "ggtext", "here", "glue", "lubridate", "geomtextpath")
+pacman::p_load("tidyverse", "ggtext", "here", "glue", "lubridate")
 
 # Load data
 owid_url <- "https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv?raw=true"
