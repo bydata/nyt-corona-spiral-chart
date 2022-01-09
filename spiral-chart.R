@@ -67,7 +67,6 @@ p <- covid_us %>%
                   ),
               color = outline_color,
               size = 0.3,
-              # fill = alpha(outline_color, 0.5),
               fill = "#F2C2C3",
               show.legend = FALSE) +
   # basic line
@@ -89,13 +88,10 @@ p <- covid_us %>%
   # annotation: years
   annotate("text", label = paste0(year_annotations$year, "\u2192"), x = year_annotations$x, 
            y = year_annotations$y, 
-           # angle = -1,
            family = "Arial", size = 2, vjust = -0.6, hjust = 0.4) +   
   
   scale_x_continuous(minor_breaks = month_breaks, 
                      breaks = month_breaks[c(1, 4, 7, 10)],
-                     # labels = month.abb
-                     # labels = month.abb[c(1, 4, 7, 10)]
                      labels = c("Jan.", "April", "July", "Oct."),
                      limits = c(1, 365),
                      expand = c(0, 0)
@@ -134,8 +130,6 @@ tibble(
                 y = 1, hjust = ifelse(cases == 0, 1.5, -0.1)),
             size = 2) +
   coord_cartesian(xlim = c(0, 350000), 
-                  # ylim = c(-as.numeric(as.POSIXct("1971-01-01")) / 2, 
-                  #          as.numeric(as.POSIXct("1971-01-01")) / 2), 
                   ylim = c(-as.numeric(as.POSIXct("1971-01-01")), NA), 
                   clip = "off") + 
   labs(title = "New Covid-19 cases,<br>United States") +
