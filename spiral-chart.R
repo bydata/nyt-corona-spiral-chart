@@ -13,12 +13,11 @@ covid_us <- covid %>%
   complete(date = seq(min(.$date), max(.$date), by = 1),
            fill = list(new_cases = 0, new_cases_smoothed = 0)) %>% 
   mutate(day_of_year = yday(date),
-         year = year(date),
-         # row = row_number()
+         year = year(date)
          )
 
 # months_abbr <- unique(month(covid_us$date, label = TRUE))
-month_length <- c(31, 29, 31, 30, 31, 30,
+month_length <- c(31, 28, 31, 30, 31, 30,
                   31, 31, 30, 31, 30, 31)
 
 month_breaks <- vector("integer", 12)
@@ -28,17 +27,14 @@ for (i in seq_along(month_length)) {
   } else {
     month_breaks[i] <- 1
   }
-  
-  
 }
 
-# with geom_ribbon
 size_factor <- 60
 outline_color <- "#D97C86"
-base_grey <- "grey32"
+base_grey <- "grey28"
+text_color <- rgb(18, 18, 18, maxColorValue = 255)
 # base_family <- "Libre Franklin Medium"
 base_family <- "Helvetica"
-text_color <- rgb(18, 18, 18, maxColorValue = 255)
 subtitle_date <- max(covid_us$date) %>% 
   format("%b. %d, %Y")
 
@@ -62,8 +58,7 @@ p <- covid_us %>%
   geom_ribbon(aes(x = day_of_year, 
                   ymin = as.POSIXct(date) - new_cases_smoothed / 2 * size_factor,
                   ymax = as.POSIXct(date) + new_cases_smoothed / 2 * size_factor,
-                  group = year
-                  ),
+                  group = year),
               color = outline_color,
               size = 0.3,
               fill = "#F2C2C3",
@@ -110,7 +105,7 @@ p <- covid_us %>%
     panel.grid.minor.x = element_line(color = "grey70", size = 0.2, linetype = "dotted"),
     axis.text.x = element_text(color = base_grey, size = 5, hjust = 0.5),
     text = element_text(color = text_color),
-    plot.subtitle = element_text(hjust = 0.5, size = 6)
+    plot.subtitle = element_text(hjust = 0.5, size = 5)
   )
 invisible(dev.off())
 
@@ -133,7 +128,7 @@ tibble(
                   clip = "off") + 
   labs(title = "New Covid-19 cases,<br>United States") +
   theme_void() +
-  theme(plot.title = element_markdown(color = text_color, family = "Helvetica",
+  theme(plot.title = element_markdown(color = text_color, family = base_family,
                                       face = "bold", size = 8, hjust = 0.5,
                                       lineheight = 1.1))
 
