@@ -1,6 +1,6 @@
 ---
 title: "Recreating the New York Times COVID-19 Spiral Graph"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE,
 
 In a recent [opinion piece](https://www.nytimes.com/2022/01/06/opinion/omicron-covid-us.html) the New York Times included this spiral graph showing the development of confirmed COVID-19 cases in the United States since the beginning of the pandemic. This visualization has stirred some debate whether it is "the proper way" to display such data. Arguments have been exchanged why this visualization is particularly bad or why it might actually be well suitable for this use case.
 
-![Original Spiral Ghart by the New York Times](nyt_original.jpeg)
+![Original Spiral Graph by the New York Times](nyt_original.jpeg)
 
 
 ## Recreating the Spiral

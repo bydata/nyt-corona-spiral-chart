@@ -10,7 +10,7 @@ proper way” to display such data. Arguments have been exchanged why this
 visualization is particularly bad or why it might actually be well
 suitable for this use case.
 
-![Original Spiral Ghart by the New York Times](nyt_original.jpeg)
+![Original Spiral Graph by the New York Times](nyt_original.jpeg)
 
 ## Recreating the Spiral
 
