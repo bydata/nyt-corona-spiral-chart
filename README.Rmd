@@ -301,7 +301,7 @@ tibble(
   labs(title = "New Covid-19 cases,<br>United States") +
   theme_void() +
   theme(plot.title = element_markdown(color = text_color, 
-                                      family = "Libre Franklin",
+                                      family = "Helvetica",
                                       face = "bold", size = 8, hjust = 0.5,
                                       lineheight = 1.1))
 
