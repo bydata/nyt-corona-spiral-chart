@@ -1,14 +1,14 @@
-Recreating the New York Times Covid-19 Spiral Chart
+Recreating the New York Times COVID-19 Spiral Chart
 ================
 
-This spiral chart the New York Times included in a recent [opinion
+In a recent [opinion
 piece](https://www.nytimes.com/2022/01/06/opinion/omicron-covid-us.html)
-has stirred some debate whether it is “the proper way” to display such
-data.
-
-Arguments have been exchanged why this visualization is particularly bad
-or why it might actually be good. From the quotation marks used around
-“the proper way” you might guess my opinion.
+the New York Times included this spiral chart showing the development of
+confirmed COVID-19 cases in the United States since the beginning of the
+pandemic. This visualization has stirred some debate whether it is “the
+proper way” to display such data. Arguments have been exchanged why this
+visualization is particularly bad or why it might actually be well
+suitable for this use case.
 
 ![Original Spiral Chart by the New York Times](nyt_original.jpeg)
 
@@ -20,17 +20,20 @@ package](https://ggplot2.tidyverse.org/). *(Hint: I like it.)*
 
 ### Packages
 
+Let’s start with loading the R packages we will use for creating this
+plot.
+
 ``` r
-pacman::p_load("tidyverse", "ggtext", "here", "glue", "lubridate")
+pacman::p_load("tidyverse", "ggtext", "here", "lubridate")
 ```
 
 ### Load and Prepare the Data
 
-We are using the COVID-19 Dataset by [Our World in
+We use the COVID-19 Dataset by [Our World in
 Data](https://github.com/owid/covid-19-data) for the number of confirmed
 Coronavirus cases in the United States.
 
-Since the original chart starts on January 1st, 2020, and the first
+Since the original chart starts on January 1st, 2020, while the first
 cases in the U.S. had been registered by end of January 2020, we add all
 the days from January 1st to the first date in the data. We manage this
 using `tibble::add_row` and `tidyr::complete`. (We could also insert all
@@ -38,7 +41,9 @@ missing dates manually, but maybe we want to reproduce the chart for
 other countries?)
 
 We calculate the day of the year as well as the year from the date
-variable in order to display the information in a cyclic manner.
+variable. The day of the year will be our x values in the plot. We will
+use the year to group the data in order to display the information in a
+cyclic manner.
 
 ``` r
 owid_url <- "https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv?raw=true"
@@ -63,13 +68,12 @@ covid_cases <- covid %>%
 Since we want to display the data in a cyclic manner, we using a polar
 coordinate system with `coord_polar`. The line is built from connecting
 each day via `geom_segment`, which takes values for x (current day) and
-xend (next day) and y and yend - the latter ones will be set to an
+xend (next day)and y and yend - the latter ones will be set to an
 integer value (UNIX timestamp) with the function `as.POSIXct`.
 
 ``` r
 p <- covid_cases %>% 
   ggplot() +
-  # basic line
   geom_segment(aes(x = day_of_year, xend = day_of_year + 1, 
                    y = as.POSIXct(date), yend = as.POSIXct(date))) +
   coord_polar()
@@ -78,8 +82,7 @@ p <- covid_cases %>%
 
 <img src="README_files/figure-gfm/unnamed-chunk-1-1.png" width="1500" />
 
-Let’s get rid of the default theme. We apply `theme_void` to get rid of
-any theme element.
+We apply `theme_void` to get rid of any theme element.
 
 ``` r
 p + theme_void()
@@ -90,17 +93,17 @@ p + theme_void()
 ### Here comes the Worm
 
 Once we have the basic spiral, we want to encode the number of confirmed
-Covid-19 cases with the size of the line. For this purpose we use the
+COVID-19 cases with the size of the line. For this purpose we use the
 `geom_ribbon` geom. For each x value, `geom_ribbon` displays a y
 interval defined by ymin and ymax.
 
 But which values to use? For `x`, we use the `day_of_the_year` column.
 The `ymin` and `ymax` aesthetics are calculated from the UNIX timestamp
-and the number of confirmed Covid-19 cases. For `ymin`, we *subtract*
+and the number of confirmed COVID-19 cases. For `ymin`, we *subtract*
 the half of the number of cases, for `ymax`, we *add* same half of the
 number of cases. Since the y values are pretty high in this plot
 (seconds of the year), we multiply the number of cases with a certain
-factor to make the ribbon visible.
+factor to make the ribbon visible. I have chosen 60 as a good factor.
 
 We also add colors for the area and the outline.
 
@@ -165,12 +168,14 @@ p + scale_x_continuous(minor_breaks = month_breaks,
 
 <img src="README_files/figure-gfm/unnamed-chunk-5-1.png" width="1500" />
 
-Notice the small breaks in the spiral? Two things happening here: First,
-the scale is expanded slightly, we will disable this default behavior.
-But secondly, *2020 was a leap year*.
+Notice the small breaks in the spiral with every new year? Two things
+are happening here: First, the scale is expanded slightly, we will
+disable this `ggplot2` default behavior. But secondly and more
+importantly, *2020 was a leap year*.
 
 I am wondering how the team at New York Times handled it. My
-quick-and-dirty workaround: drop February 29th, 2020.
+quick-and-dirty workaround: drop February 29th, 2020. Given that we
+present rolling 7-day averages this seems acceptable.
 
 In the original plot, the spiral does not start in the center. We will
 add some buffer to the limits of the polar y-axis.
@@ -218,9 +223,9 @@ p
 
 ### Annotations
 
-The chart contains a couple of annotations: the years in the spiral, the
-date of the latest data in the title, and the description that 7-day
-averages are shown.
+The original chart contains a couple of annotations: the years in the
+spiral, the date of the latest data in the title, and the description
+that 7-day averages are shown.
 
 ``` r
 text_color <- rgb(18, 18, 18, maxColorValue = 255)
@@ -305,12 +310,13 @@ the years. The [`geomtextpath`
 package](https://github.com/AllanCameron/geomtextpath) might come in
 handy here.
 
-Finally, I wanted to add the legend. The `inset_element` function from
+Finally, we want to add the legend. The `inset_element` function from
 the [`patchwork` package](https://github.com/thomasp85/patchwork) by
-Thomas Lin Pedersen allows to add a plot inside another one. Hence, I
-created a separate plot for the legend which - approximately -
+Thomas Lin Pedersen allows to add a plot inside another one. Hence, we
+create a separate plot for the legend which - roughly approximately -
 represents the data from the plot and then used `inset_element` to add
-it into the spiral plot.
+it into the spiral plot. (This is more “fake it till you make it”, I am
+open for any suggestions to handle this programmatically.)
 
 ``` r
 library(patchwork)
@@ -338,8 +344,6 @@ tibble(
                                       face = "bold", size = 8, hjust = 0.5,
                                       lineheight = 1.1))
 
-
-
 ragg::agg_png(here("plots", "nyt_spiral_with-legend.png"),
               res = 300, width = 1200, height = 1200 * 746/615)
 p + inset_element(p_legend, left = 0.05, bottom = 0.725, right = 0.25, top = 0.95)
@@ -350,8 +354,11 @@ invisible(dev.off())
 |:-----------------------------------------------------------------:|:----------------------------------------------------------------------:|
 | ![Original Spiral Chart by the New York Times](nyt_original.jpeg) | ![Recreated spiral plot with legend](plots/nyt_spiral_with-legend.png) |
 
-The biggest difference between original and recreated chart: in the
-original chart, there gridlines have different lengths (compare January
-to July). This could probably be done in a post-processing step in tools
-like Adobe Illustrator or Figma. I would be glad about any advice how to
-solve this in `ggplot2` directly.
+The biggest difference between original and recreated chart: The grid
+lines in the original chart differ in length (compare January to July).
+This could probably be done in a post-processing step in tools like
+Adobe Illustrator or Figma. I would be glad about any advice how to
+solve this programmatically in `ggplot2` directly, i.e. without drawing
+the grid lines as geoms. I could also think of editing the plot with the
+[`magick` package](https://github.com/ropensci/magick) for advanced
+image processing in R.
