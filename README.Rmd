@@ -194,7 +194,7 @@ p
 
 ### Annotations
 
-The original chart contains a couple of annotations: the years in the spiral, the date of the latest data in the title, and the description that 7-day averages are shown.
+The original chart contains a couple of annotations: the years are labelled in the spiral as a clue of the direction to read the plot, the date of the latest data in the title, and the description that 7-day averages are shown.
 
 ```{r warning=FALSE}
 
@@ -204,12 +204,12 @@ base_family <- "Libre Franklin Medium"
 subtitle_date <- max(covid_cases$date) %>% 
   format("%b. %d, %Y")
 
+# Annotations for the years in a list (used in annotate())
 year_annotations <- list(
   year = 2020:2022,
   x = rep(3, 3),
   y = as.POSIXct(paste(2020:2022, "01", "01", sep = "-"))
 )
-
 
 p <- covid_cases %>% 
   # 2020 is a leap year, we could drop Feb 29, 2020 for the sake of 365-day years
@@ -243,7 +243,8 @@ p <- covid_cases %>%
   # annotation: years
   annotate("text", label = paste0(year_annotations$year, "\u2192"), x = year_annotations$x, 
            y = year_annotations$y, 
-           family = "Arial", size = 2, vjust = -0.6, hjust = 0.15) +   
+           family = "Arial",
+           size = 1.5, vjust = -0.6, hjust = 0.15) +   
   
   scale_x_continuous(minor_breaks = month_breaks, 
                      breaks = month_breaks[c(1, 4, 7, 10)],
