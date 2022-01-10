@@ -1,16 +1,16 @@
-Recreating the New York Times COVID-19 Spiral Chart
+Recreating the New York Times COVID-19 Spiral Graph
 ================
 
 In a recent [opinion
 piece](https://www.nytimes.com/2022/01/06/opinion/omicron-covid-us.html)
-the New York Times included this spiral chart showing the development of
+the New York Times included this spiral graph showing the development of
 confirmed COVID-19 cases in the United States since the beginning of the
 pandemic. This visualization has stirred some debate whether it is “the
 proper way” to display such data. Arguments have been exchanged why this
 visualization is particularly bad or why it might actually be well
 suitable for this use case.
 
-![Original Spiral Chart by the New York Times](nyt_original.jpeg)
+![Original Spiral Ghart by the New York Times](nyt_original.jpeg)
 
 ## Recreating the Spiral
 
@@ -354,7 +354,7 @@ invisible(dev.off())
 
 |                          Original spiral                          |                            Recreated spiral                            |
 |:-----------------------------------------------------------------:|:----------------------------------------------------------------------:|
-| ![Original Spiral Chart by the New York Times](nyt_original.jpeg) | ![Recreated spiral plot with legend](plots/nyt_spiral_with-legend.png) |
+| ![Original Spiral Graph by the New York Times](nyt_original.jpeg) | ![Recreated spiral plot with legend](plots/nyt_spiral_with-legend.png) |
 
 The biggest difference between original and recreated chart: The grid
 lines in the original chart differ in length (compare January to July).
