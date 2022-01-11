@@ -160,7 +160,7 @@ invisible(dev.off())
 
 ```{r legend}
 
-legend_max_text <- ifelse(params$legend_value < 1000, 
+legend_max_text <- ifelse(params$legend_value < 10000, 
                           params$legend_value,
                           scales::number(params$legend_value, scale = 0.001, 
                                          suffix = "k"))
